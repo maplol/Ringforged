@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Галерея — Повелитель Колец</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .gallery-section {
+      margin: 4rem 0;
+    }
+    .gallery-section h2 {
+      font-family: 'Cormorant Unicase', 'Cinzel', serif;
+      text-align: center;
+      border-bottom: none;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+    .gallery-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+    .gallery-section .section-desc {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      text-indent: 0;
+    }
+    .char-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      transition: border-color 0.3s;
+    }
+    .char-card:hover {
+      border-color: var(--accent);
+    }
+    .char-card h3 {
+      font-family: 'Cormorant Unicase', serif;
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .char-card .card-subtitle {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+      text-indent: 0;
+    }
+    .char-card img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 1.2rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .char-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-indent: 0;
+      text-align: center;
+      line-height: 1.7;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin: 3rem 0 1rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+    }
+    .faction-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 900px) {
+      .container { max-width: 900px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="index-hero" style="padding: 4rem 0 2rem;">
+      <h1>Галерея</h1>
+      <p class="subtitle">Персонажи и фракции мира Ауракс</p>
+    </div>
+
+    <a href="index.html" class="back-link" style="margin-top: 0;">&larr; Вернуться к содержанию</a>
+
+    <!-- ===== ВЛАД ===== -->
+    <section class="gallery-section">
+      <h2>Влад Ветров</h2>
+      <p class="section-desc">Пять этапов пути — от беззаботного мальчишки до Повелителя Колец</p>
+
+      <div class="char-card">
+        <h3>Этап 1: Беззаботность</h3>
+        <div class="card-subtitle">8 лет — до нападения на Блуждающий Дол</div>
+        <img src="images/vlad-stage-1-carefree.png" alt="Влад — Этап 1: Беззаботность">
+        <p>Мягкие непослушные волосы, открытая улыбка, румянец на щеках. Просторная льняная туника, плетёный пояс. Шарф ещё принадлежит матери — длинный, бирюзовый, с белыми спиралями Великого Дыхания.</p>
+      </div>
+
+      <div class="char-card">
+        <h3>Этап 2: Выживший</h3>
+        <div class="card-subtitle">12–14 лет — скитания и тренировки</div>
+        <img src="images/vlad-stage-2-survivor.png" alt="Влад — Этап 2: Выживший">
+        <p>Дикие, отросшие, грязные волосы. Взгляд исподлобья, ссадины, обветренная кожа. Оборванная одежда, кожаная куртка не по размеру, обмотки на ногах. Шарф замотан в несколько слоёв — щит от мира. Обгоревшие концы — память о пожаре. Кольцо Ветра массивно на детской руке.</p>
+      </div>
+
+      <div class="char-card">
+        <h3>Этап 3: Мастер Ветра</h3>
+        <div class="card-subtitle">16–18 лет — основной сюжет</div>
+        <img src="images/vlad-stage-3-wind-master.png" alt="Влад — Этап 3: Мастер Ветра">
+        <p>Короткие колючие волосы, шрам на скуле. Тёмная водолазка без рукавов, жилетка с глубоким капюшоном, штаны-хакама с бинтами, асимметричный наплечник, перчатка без пальцев на правой руке. Шарф расслаблен — два конца развеваются как бирюзовые крылья.</p>
+      </div>
+
+      <div class="char-card">
+        <h3>Этап 4: Поворотная точка</h3>
+        <div class="card-subtitle">18–19 лет — сожжение шарфа</div>
+        <img src="images/vlad-stage-4-burning-scarf.png" alt="Влад — Этап 4: Сожжение шарфа">
+        <p>Шарф вспыхивает и сгорает в пепел. Ожог на шее. Разрыв цепей прошлого — Влад отпускает мёртвых и обретает истинную силу. За спиной — силуэт Генерала Огня.</p>
+      </div>
+
+      <div class="char-card">
+        <h3>Этап 5: Перерождение</h3>
+        <div class="card-subtitle">После потери шарфа — финальная форма</div>
+        <img src="images/vlad-stage-5-reborn.png" alt="Влад — Этап 5: Перерождение">
+        <p>Без шарфа. Силуэт стал гладким, строгим, опасным. Длинный плащ-пыльник развевается на ветру. Шрам от ожога на шее. Волосы приглажены — знак контроля. Глаза спокойны и холодны, как центр урагана. Кольца на обеих руках.</p>
+      </div>
+    </section>
+
+    <!-- ===== ФРАКЦИИ ===== -->
+    <section class="gallery-section">
+      <h2>Фракции Ауракса</h2>
+      <p class="section-desc">Одежда и культура шести народов расколотого мира</p>
+
+      <div class="faction-grid">
+
+        <div class="char-card">
+          <h3>Блуждающий Дол</h3>
+          <div class="card-subtitle">Кочевники Ветра и Природы — родина Влада</div>
+          <img src="images/faction-1-wandering-dale.png" alt="Блуждающий Дол — одежда фракции">
+          <p>Лёгкая многослойная одежда из дышащих тканей. Воины — в облегающих костюмах с капюшонами и плащами-крыльями. Старейшины — в мантиях с вышивкой спиралей ветра, украшениях из дерева и перьев.</p>
+        </div>
+
+        <div class="char-card">
+          <h3>Империя Игнис</h3>
+          <div class="card-subtitle">Огонь и Пепел — агрессоры</div>
+          <img src="images/faction-2-ignis-empire.png" alt="Империя Игнис — одежда фракции">
+          <p>Грубая огнеупорная одежда, гоглы от пепла. Воины — в обсидиановой пластинчатой броне с демоническими шлемами и респираторами. Генералы — в доспехах с раскалёнными рунами, накидках из шкур пепельных волков.</p>
+        </div>
+
+        <div class="char-card">
+          <h3>Коалиция Лазурных Рек</h3>
+          <div class="card-subtitle">Вода и Лёд — торговцы и дипломаты</div>
+          <img src="images/faction-3-azure-rivers.png" alt="Коалиция Лазурных Рек — одежда фракции">
+          <p>Элегантные водоотталкивающие ткани, широкие пояса-кушаки. Воины — в чешуйчатой броне из зачарованного льда с флягами для водяных хлыстов. Матриархи — в полупрозрачных шелках, украшениях из кораллов и жемчуга.</p>
+        </div>
+
+        <div class="char-card">
+          <h3>Тектрон</h3>
+          <div class="card-subtitle">Техно-город Пустоши — Земля и Электричество</div>
+          <img src="images/faction-4-tektron.png" alt="Тектрон — одежда фракции">
+          <p>Комбинезоны с карманами, арафатки от песчаных бурь, механические протезы. Инфорсеры — в экзоскелетах на кольцах электричества, тяжёлых ботинках заземления. Совет Директоров — в строгих костюмах с неоновыми вставками и кибернетическими глазами.</p>
+        </div>
+
+        <div class="char-card">
+          <h3>Аурумгард</h3>
+          <div class="card-subtitle">Дворяне замка — Гравитация и Иллюзии</div>
+          <img src="images/faction-5-aurumgard.png" alt="Аурумгард — одежда фракции">
+          <p>Прислуга — в серых безликих лохмотьях с тяжёлыми металлическими воротниками покорности. Королевская Гвардия — в сияющей золотой броне, парит в воздухе, глухие слепые шлемы. Знать — в левитирующих белых и золотых одеяниях с идеальной иллюзорной кожей.</p>
+        </div>
+
+        <div class="char-card">
+          <h3>Культ Омега</h3>
+          <div class="card-subtitle">Секретная фракция — Магия Крови, Распада, Тьмы</div>
+          <img src="images/faction-6-cult-omega.png" alt="Культ Омега — одежда фракции">
+          <p>Днём — богачи и генералы из других фракций, вычислить невозможно. На тайных собраниях — светопоглощающие бархатные плащи, пустые маски без глаз и рта, забинтованные руки со шрамами от магии Крови.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <a href="index.html" class="back-link">&larr; Вернуться к содержанию</a>
+
+  </div>
+</body>
+</html>
