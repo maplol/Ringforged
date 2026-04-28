@@ -1,0 +1,44 @@
+{
+  "reference": {
+    "asset_id": "f1257f87-73e9-445a-a1ec-b69e8c136b73",
+    "label": "vlad_v2 (style reference)"
+  },
+  "assets": [
+    { "asset_id": "f1257f87-73e9-445a-a1ec-b69e8c136b73", "file": "vlad_v2.png", "label": "player", "size": 64 },
+    { "asset_id": "e6051c70-2bd7-47f6-bbb1-1c530bb6f533", "file": "ignis_soldier.png", "label": "ignis_soldier", "size": 64 },
+    { "asset_id": "3a17ba7f-5d31-4582-a96a-f03952e89711", "file": "ignis_archer.png", "label": "ignis_archer", "size": 64 },
+    { "asset_id": "2ca06386-d3f3-4377-af6d-be613d07e4c1", "file": "ignis_berserker.png", "label": "ignis_berserker", "size": 64 },
+    { "asset_id": "c5ae3452-910f-4227-bcd1-ae847211e601", "file": "ignis_sniper.png", "label": "ignis_sniper", "size": 64 },
+    { "asset_id": "c2583454-350d-4880-8335-fd63dbb64a16", "file": "tektron_enforcer.png", "label": "tektron_enforcer", "size": 64 },
+    { "asset_id": "970bc951-71c1-4c50-9486-620301be5e04", "file": "tektron_drone.png", "label": "tektron_drone", "size": 48 },
+    { "asset_id": "33a4f4b1-926b-44d1-b174-f89d9b111ede", "file": "water_guardian.png", "label": "water_guardian", "size": 64 },
+    { "asset_id": "d16310ed-8432-4841-89eb-5120375b60ba", "file": "aurumgard_guard.png", "label": "aurumgard_guard", "size": 64 },
+    { "asset_id": "d4fdae56-b02d-4ca0-ba53-d1190d28b42e", "file": "cultist.png", "label": "cultist", "size": 64 },
+    { "asset_id": "577c3f05-8536-4fb1-995f-e64e5f9fa4eb", "file": "cultist_tank.png", "label": "cultist_tank", "size": 64 },
+    { "asset_id": "7384e094-034e-43bc-a3ae-72ab397a4206", "file": "healer.png", "label": "healer", "size": 64 },
+    { "asset_id": "56f9b7dc-4311-4085-bfb9-cbc63b5b9968", "file": "marauder.png", "label": "marauder", "size": 64 },
+    { "asset_id": "4e698a13-0f19-49e5-a4d8-de3cfbc9b431", "file": "mercenary.png", "label": "mercenary", "size": 64 },
+    { "asset_id": "994a7c1a-643c-4cde-8cd9-cd50c17dbc95", "file": "smuggler.png", "label": "smuggler", "size": 64 },
+    { "asset_id": "5afe5385-b7af-4cf8-b730-44e5bd2d6317", "file": "magnetist.png", "label": "magnetist", "size": 64 },
+    { "asset_id": "a0fd5a8e-8935-48c6-be61-d29fcdfcfb16", "file": "illusionist.png", "label": "illusionist", "size": 64 },
+    { "asset_id": "2f998375-016e-4658-bfb6-883a93913849", "file": "levitator.png", "label": "levitator", "size": 64 },
+    { "asset_id": "0083cfa1-047e-4e79-ac57-14f48ef9ee76", "file": "bombardier.png", "label": "bombardier", "size": 64 },
+    { "asset_id": "8ad06b64-64f2-4f98-8aef-eb587b9fc64c", "file": "pirate.png", "label": "pirate", "size": 64 },
+    { "asset_id": "08a361b5-01a5-4a90-acb0-de0587e494b4", "file": "ghost_mage.png", "label": "ghost_mage", "size": 64 },
+    { "asset_id": "2004d4f7-6f8b-4ab6-bf0b-8b922897c4df", "file": "elite_cultist.png", "label": "elite_cultist", "size": 64 },
+    { "asset_id": "2a2541a2-85de-4280-a877-02af6598379c", "file": "elite_berserker.png", "label": "elite_berserker (miniboss)", "size": 80 },
+    { "asset_id": "1365ab0a-98ca-46b2-9189-d09f8881d025", "file": "void_sentinel.png", "label": "void_sentinel (miniboss)", "size": 80 },
+    { "asset_id": "370a32c5-1ddc-40d5-a688-103ddbcc1828", "file": "iron_golem.png", "label": "iron_golem (miniboss)", "size": 80 },
+    { "asset_id": "bf79dc1b-c7ec-40a7-8898-daa71e957d79", "file": "boss_general.png", "label": "boss_general", "size": 96 },
+    { "asset_id": "e626ab8e-ff80-4bd5-9528-0519e62d948a", "file": "boss_morven.png", "label": "boss_morven", "size": 128 },
+    { "asset_id": "39ce9eb8-1834-4007-9c5b-d83178e09b8a", "file": "boss_kael.png", "label": "boss_kael", "size": 128 }
+  ],
+  "animations": [
+    { "asset_id": "6d24714d-1543-4a0d-bfd9-3f75ca94baab", "file": "vlad_idle.webp", "label": "player idle", "frames": 4, "frameW": 200, "frameH": 200, "fps": 8 },
+    { "asset_id": "4f35e0d2-e858-432e-9d27-c22f23c3ed79", "file": "vlad_walk.webp", "label": "player walk", "frames": 6, "frameW": 200, "frameH": 200, "fps": 10 },
+    { "asset_id": "f57ebf36-9d02-4de1-aee2-574b0cdb77be", "file": "vlad_attack.webp", "label": "player attack", "frames": 4, "frameW": 200, "frameH": 200, "fps": 12 },
+    { "asset_id": "520c99c5-5235-4e8d-a9ed-da3e2273b947", "file": "boss_general_idle.webp", "label": "boss general idle", "frames": 4, "frameW": 216, "frameH": 216, "fps": 8 },
+    { "asset_id": "13172e63-b36c-4543-8cc7-f44a46ef0387", "file": "boss_morven_idle.webp", "label": "boss morven idle", "frames": 4, "frameW": 208, "frameH": 208, "fps": 8 },
+    { "asset_id": "a08f8298-80db-4e2e-b234-17edc361fd82", "file": "boss_kael_idle.webp", "label": "boss kael idle", "frames": 4, "frameW": 210, "frameH": 210, "fps": 8 }
+  ]
+}

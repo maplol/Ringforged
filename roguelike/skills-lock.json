@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "skills": {
+    "context-engineering-collection": {
+      "source": "muratcankoylan/agent-skills-for-context-engineering",
+      "sourceType": "github",
+      "computedHash": "618e1d8fb15cad0ab9ed71e293d8cf09639a191298b604bc0d3380ceeb82958e"
+    },
+    "develop-web-game": {
+      "source": "openai/skills",
+      "sourceType": "github",
+      "computedHash": "ce15d03cc8c299e062c6b6b31a1238264b06c7b23900a58861e53073e1ac9739"
+    },
+    "game-development": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "a5a1b37d86be11134798abc1558f964ca4fc538fc56ac661f779a90a54e338ca"
+    },
+    "simple": {
+      "source": "roin-orca/skills",
+      "sourceType": "github",
+      "computedHash": "cfde9dde00c9b1f8934e0312440a5ae2ed76dbd81e49ba7433e0e63ea6551d13"
+    },
+    "spritecook-animate-assets": {
+      "source": "spritecook/skills",
+      "sourceType": "github",
+      "computedHash": "55a077edc93d6a89d2f1caf73806893cdda2895800e92a44332ca252b6785fb2"
+    },
+    "spritecook-generate-sprites": {
+      "source": "spritecook/skills",
+      "sourceType": "github",
+      "computedHash": "5488eb17f7b5f9acb488670ea921be2fbef1b3cbb47d61dae0e5bf7c853359de"
+    },
+    "spritecook-workflow-essentials": {
+      "source": "spritecook/skills",
+      "sourceType": "github",
+      "computedHash": "abefc54629c6971c1d42eb261056904fcfe4e8df22e85b5080969e2c3601229d"
+    },
+    "typescript-advanced-types": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "3a3be8c925f96ac4e1280db28a01677e7ca5197f3792de2bbf35ab3bb324b6dd"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "computedHash": "ca7b0c0c6e5f2750043f7f0cd72d16ac4e2abc48f9b5500d047a4b77a2506212"
+    }
+  }
+}

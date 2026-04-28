@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ringforged — Карта мира и маршрут Влада</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .map-wrap {
+      background: linear-gradient(180deg, #11151f 0%, #0d1017 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 1rem;
+      overflow: auto;
+    }
+    .map-title {
+      text-align: center;
+      margin-bottom: 0.6rem;
+      color: var(--accent-bright);
+    }
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.6rem;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .legend span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.45rem;
+    }
+    .route-panel {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .route-btn {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 0.45rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .route-btn.active {
+      border-color: var(--accent);
+      color: var(--accent-bright);
+      box-shadow: 0 0 0 1px var(--accent-glow) inset;
+    }
+    .route-note {
+      margin-top: 1rem;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      text-indent: 0;
+    }
+    .map-label {
+      font-size: 14px;
+      fill: #d8d3c8;
+      font-family: 'PT Serif', Georgia, serif;
+    }
+    .biome {
+      stroke: #2d3448;
+      stroke-width: 2;
+      opacity: 0.9;
+    }
+    .route-line {
+      fill: none;
+      stroke: #e8c47a;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 4px rgba(232, 196, 122, 0.35));
+    }
+    .route-line.hidden {
+      opacity: 0.16;
+      stroke: #5f6674;
+      filter: none;
+    }
+    .step-dot {
+      fill: #f3d697;
+      stroke: #7a5e2c;
+      stroke-width: 1.5;
+    }
+    .step-text {
+      font-size: 12px;
+      fill: #e5dece;
+      font-family: 'PT Serif', Georgia, serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="volume-header" style="padding-top: 2.2rem;">
+      <div class="volume-number">Атлас</div>
+      <h1 class="volume-title">Карта мира Ауракс</h1>
+      <p class="volume-subtitle">География, биомы и маршрут Влада по томам</p>
+    </div>
+
+    <h2>Каноничная география (рабочая версия)</h2>
+    <p>Порядок расположен так, чтобы перемещения Влада между томами были логичны по направлению и биомам: западные равнины -> северные водные земли -> юго-восточная техно-пустыня -> юго-западные вулканы Игнис -> северо-восточный Аурумгард -> океанический Остров Забвения -> центр мира (Мёртвая Зона).</p>
+
+    <div class="legend">
+      <div><span style="background:#5f9263;"></span>Блуждающий Дол (ветер, равнины)</div>
+      <div><span style="background:#3f7ea3;"></span>Коалиция Лазурных Рек (вода, водопады)</div>
+      <div><span style="background:#a38246;"></span>Тектрон (пустыня, металл, молнии)</div>
+      <div><span style="background:#9a4e3b;"></span>Империя Игнис (вулканы, пепел)</div>
+      <div><span style="background:#b8b18a;"></span>Аурумгард (парящий замок, тени внизу)</div>
+      <div><span style="background:#7b6ea8;"></span>Остров Забвения (Культ Омега)</div>
+      <div><span style="background:#7d8aa3;"></span>Мёртвая Зона (стеклянный кратер)</div>
+    </div>
+
+    <div class="map-wrap">
+      <p class="map-title">Схема континента и опорных точек сюжета</p>
+      <svg viewBox="0 0 1400 860" width="100%" role="img" aria-label="Карта мира Ауракс с маршрутами Влада">
+        <rect x="0" y="0" width="1400" height="860" fill="#0c1220"></rect>
+        <ellipse cx="700" cy="430" rx="640" ry="350" fill="#152236" stroke="#23324a" stroke-width="3"></ellipse>
+
+        <ellipse class="biome" cx="360" cy="410" rx="180" ry="130" fill="#466b4b"></ellipse>
+        <text class="map-label" x="280" y="405">Блуждающий Дол</text>
+        <text class="map-label" x="255" y="430">Западные равнины, ветер</text>
+
+        <ellipse class="biome" cx="700" cy="240" rx="210" ry="120" fill="#2f6486"></ellipse>
+        <text class="map-label" x="575" y="235">Аква-Гранд</text>
+        <text class="map-label" x="525" y="260">Север, водопады и лёд</text>
+
+        <ellipse class="biome" cx="990" cy="540" rx="200" ry="135" fill="#8b6f3c"></ellipse>
+        <text class="map-label" x="910" y="535">Тектрон</text>
+        <text class="map-label" x="850" y="560">Юго-восток, пустыня/металл</text>
+
+        <ellipse class="biome" cx="500" cy="620" rx="200" ry="140" fill="#8a4536"></ellipse>
+        <text class="map-label" x="435" y="615">Игнис</text>
+        <text class="map-label" x="365" y="640">Юго-запад, вулканы и пепел</text>
+
+        <ellipse class="biome" cx="980" cy="290" rx="150" ry="95" fill="#9f9977"></ellipse>
+        <ellipse class="biome" cx="980" cy="360" rx="165" ry="85" fill="#34333d" opacity="0.7"></ellipse>
+        <text class="map-label" x="915" y="285">Аурумгард</text>
+        <text class="map-label" x="860" y="310">Северо-восток, парящий замок</text>
+
+        <ellipse class="biome" cx="1110" cy="420" rx="80" ry="58" fill="#6d6098"></ellipse>
+        <text class="map-label" x="1040" y="420">Остров Забвения</text>
+        <text class="map-label" x="1025" y="444">Подвижный, океан</text>
+
+        <circle class="biome" cx="710" cy="450" r="90" fill="#5f7088"></circle>
+        <circle cx="710" cy="450" r="45" fill="#32435c"></circle>
+        <text class="map-label" x="640" y="452">Мёртвая Зона</text>
+        <text class="map-label" x="616" y="476">Центральный кратер</text>
+
+        <path id="r1" class="route-line" d="M360 410 L700 240"></path>
+        <path id="r2" class="route-line" d="M700 240 L990 540"></path>
+        <path id="r3" class="route-line" d="M990 540 L500 620"></path>
+        <path id="r4" class="route-line" d="M500 620 L980 290"></path>
+        <path id="r5" class="route-line" d="M980 290 L1110 420"></path>
+        <path id="r6" class="route-line" d="M1110 420 L710 450"></path>
+
+        <circle class="step-dot" cx="360" cy="410" r="8"></circle>
+        <text class="step-text" x="368" y="398">Т1</text>
+        <circle class="step-dot" cx="700" cy="240" r="8"></circle>
+        <text class="step-text" x="708" y="228">Т2</text>
+        <circle class="step-dot" cx="990" cy="540" r="8"></circle>
+        <text class="step-text" x="998" y="528">Т3</text>
+        <circle class="step-dot" cx="500" cy="620" r="8"></circle>
+        <text class="step-text" x="508" y="608">Т4</text>
+        <circle class="step-dot" cx="980" cy="290" r="8"></circle>
+        <text class="step-text" x="988" y="278">Т5</text>
+        <circle class="step-dot" cx="1110" cy="420" r="8"></circle>
+        <text class="step-text" x="1118" y="408">Т6</text>
+        <circle class="step-dot" cx="710" cy="450" r="8"></circle>
+        <text class="step-text" x="718" y="438">Т8</text>
+      </svg>
+
+      <div class="route-panel">
+        <button class="route-btn active" data-step="all">Весь маршрут</button>
+        <button class="route-btn" data-step="2">До Тома 2</button>
+        <button class="route-btn" data-step="3">До Тома 3</button>
+        <button class="route-btn" data-step="4">До Тома 4</button>
+        <button class="route-btn" data-step="5">До Тома 5</button>
+        <button class="route-btn" data-step="6">До Тома 6</button>
+        <button class="route-btn" data-step="8">Финальный сход к центру</button>
+      </div>
+
+      <p id="route-note" class="route-note">Полная последовательность: Дол -> Аква-Гранд -> Тектрон -> Игнис -> Аурумгард -> Остров Забвения -> Мёртвая Зона.</p>
+    </div>
+
+    <h2>Примечание по Тому 7 (Пограничье)</h2>
+    <p>Пограничье — не географическая точка на материальной карте, а отдельный слой реальности. На карте мира он обозначается как "внеплоскостной этап", который влияет на маршрут, но не имеет фиксированных координат.</p>
+
+    <p style="text-align:center; margin-top: 2rem;"><a href="index.html">&larr; К содержанию</a></p>
+  </div>
+
+  <script>
+    (function () {
+      const btns = document.querySelectorAll('.route-btn');
+      const lines = [
+        document.getElementById('r1'),
+        document.getElementById('r2'),
+        document.getElementById('r3'),
+        document.getElementById('r4'),
+        document.getElementById('r5'),
+        document.getElementById('r6')
+      ];
+      const note = document.getElementById('route-note');
+
+      const notes = {
+        all: 'Полная последовательность: Дол -> Аква-Гранд -> Тектрон -> Игнис -> Аурумгард -> Остров Забвения -> Мёртвая Зона.',
+        2: 'Т1-2: Блуждающий Дол -> Аква-Гранд. Переход от детства к обучению.',
+        3: 'Т1-3: Дол -> Аква-Гранд -> Тектрон. Обучение сменяется аренной системой долга.',
+        4: 'Т1-4: ... -> Игнис. Путь в травму и первый большой слом мотивации.',
+        5: 'Т1-5: ... -> Аурумгард. Сдвиг от личной мести к социальному конфликту.',
+        6: 'Т1-6: ... -> Остров Забвения. Падение героя на запретной магии.',
+        8: 'Т8: сход всех линий в Мёртвой Зоне (центр мира и финальный узел сюжета).'
+      };
+
+      function setStep(step) {
+        btns.forEach((b) => b.classList.remove('active'));
+        document.querySelector(`.route-btn[data-step="${step}"]`).classList.add('active');
+
+        lines.forEach((line, i) => {
+          line.classList.add('hidden');
+          if (step === 'all') line.classList.remove('hidden');
+          else {
+            const num = Number(step);
+            if (num === 8) line.classList.remove('hidden');
+            else if (i < num - 1) line.classList.remove('hidden');
+          }
+        });
+        note.textContent = notes[step];
+      }
+
+      btns.forEach((btn) => btn.addEventListener('click', () => setStep(btn.dataset.step)));
+      setStep('all');
+    })();
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

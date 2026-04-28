@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ringforged — Карта Ауракса</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #233c64;
+      --accent: #c8a838;
+      --text: #2a3a4a;
+      --text-dim: #5a6a7a;
+      --panel-w: min(420px, 92vw)
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100dvh
+    }
+
+    .map-view {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      cursor: grab
+    }
+
+    .map-view:active {
+      cursor: grabbing
+    }
+
+    .svg-wrap {
+      position: absolute;
+      inset: 0;
+      touch-action: none;
+      user-select: none;
+      overflow: visible
+    }
+
+    .svg-transform {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0 0;
+      will-change: transform
+    }
+
+    .map-container {
+      position: relative;
+      width: 4096px;
+      height: 4096px;
+      margin-left: -2048px;
+      margin-top: -2048px
+    }
+
+    .tile-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4096px;
+      height: 4096px;
+      pointer-events: none;
+      z-index: 0
+    }
+
+    .tile-layer img {
+      position: absolute;
+      display: block;
+      image-rendering: auto
+    }
+
+    .svg-wrap {
+      z-index: 2
+    }
+
+    .map-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1
+    }
+
+    .faction-border {
+      fill: none;
+      stroke: rgba(60, 40, 10, .35);
+      stroke-width: 7;
+      stroke-dasharray: 28 18;
+      pointer-events: none
+    }
+
+    .region-label {
+      font: 700 72px/1 'EB Garamond', serif;
+      fill: rgba(35, 25, 10, .7);
+      text-anchor: middle;
+      dominant-baseline: central;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: rgba(235, 230, 215, .5);
+      stroke-width: 8px;
+      stroke-linejoin: round;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: opacity .5s
+    }
+
+    .region-label.fog {
+      opacity: 0 !important
+    }
+
+    .region-label.small {
+      font-size: 48px;
+      fill: rgba(35, 25, 10, .45)
+    }
+
+    .city-dot {
+      cursor: pointer;
+      transition: r .2s, opacity .5s
+    }
+
+    .city-dot:hover {
+      r: 28
+    }
+
+    .city-dot.fog {
+      opacity: 0 !important;
+      pointer-events: none !important
+    }
+
+    .city-label {
+      font: 700 40px/1 'EB Garamond', serif;
+      fill: #2a1a0a;
+      text-anchor: middle;
+      dominant-baseline: hanging;
+      pointer-events: none;
+      paint-order: stroke fill;
+      stroke: rgba(235, 230, 215, .7);
+      stroke-width: 8px;
+      stroke-linejoin: round;
+      transition: opacity .5s
+    }
+
+    .city-label.fog {
+      opacity: 0 !important
+    }
+
+    .route-line {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+      transition: opacity .5s;
+      opacity: .8
+    }
+
+    .route-line.dashed {
+      stroke-dasharray: 28 18;
+      animation: march 2s linear infinite
+    }
+
+    @keyframes march {
+      to {
+        stroke-dashoffset: -92
+      }
+    }
+
+    .route-dot {
+      pointer-events: none;
+      transition: opacity .5s
+    }
+
+    .tooltip {
+      position: fixed;
+      padding: 8px 14px;
+      background: rgba(245, 240, 225, .96);
+      border: 1px solid rgba(160, 140, 80, .3);
+      color: #2a2a1a;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transform: translateY(3px);
+      transition: opacity .15s, transform .15s;
+      white-space: nowrap;
+      max-width: 300px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .12)
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .tooltip .tt-sub {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-weight: 400;
+      display: block;
+      margin-top: 3px
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      z-index: 30;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(74, 122, 152, .88) 50%, transparent)
+    }
+
+    .top-bar>* {
+      pointer-events: auto
+    }
+
+    .top-title {
+      font-family: 'Cormorant Unicase', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #e8e4d4;
+      letter-spacing: .08em
+    }
+
+    .top-sub {
+      font-size: .65rem;
+      color: rgba(220, 216, 200, .7);
+      margin-top: 2px
+    }
+
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      background: linear-gradient(to top, rgba(74, 122, 152, .94) 70%, transparent);
+      padding: 10px 18px 14px
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .progress-label {
+      font-size: .76rem;
+      font-weight: 700;
+      color: #e8e4d4;
+      white-space: nowrap;
+      min-width: 80px;
+      font-family: 'EB Garamond', serif;
+      font-style: italic
+    }
+
+    .progress-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(0, 0, 0, .2);
+      outline: none;
+      cursor: pointer
+    }
+
+    .progress-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #c8a838;
+      border: 3px solid #fff;
+      cursor: grab;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .2)
+    }
+
+    .spoiler-btn {
+      padding: 5px 14px;
+      background: rgba(180, 80, 60, .15);
+      border: 1px solid rgba(180, 80, 60, .35);
+      color: #e8a898;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: 'Manrope', sans-serif;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .25s;
+      letter-spacing: .05em;
+      white-space: nowrap
+    }
+
+    .spoiler-btn:hover {
+      background: rgba(180, 80, 60, .3)
+    }
+
+    .spoiler-btn.active {
+      background: rgba(180, 80, 60, .4);
+      border-color: #a04838;
+      color: #fff
+    }
+
+    .tom-chips {
+      display: flex;
+      gap: 3px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+      justify-content: center
+    }
+
+    .tom-chip {
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, .15);
+      border: 1px solid rgba(255, 255, 255, .15);
+      color: rgba(220, 216, 200, .6);
+      font-size: 9px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .tom-chip.unlocked {
+      border-color: rgba(200, 180, 100, .4);
+      color: #e8e0c0;
+      background: rgba(255, 250, 220, .15)
+    }
+
+    .tom-chip.current {
+      background: rgba(200, 168, 56, .3);
+      border-color: #c8a838;
+      color: #fff
+    }
+
+    .zoom-btns {
+      position: absolute;
+      bottom: 95px;
+      right: 14px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      gap: 3px
+    }
+
+    .zoom-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, .2);
+      border: 1px solid rgba(255, 255, 255, .15);
+      color: #e8e4d4;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: monospace;
+      backdrop-filter: blur(4px)
+    }
+
+    .zoom-btn:hover {
+      background: rgba(255, 255, 255, .35)
+    }
+
+    .legend {
+      position: absolute;
+      top: 62px;
+      left: 14px;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 9px
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(220, 216, 200, .8);
+      transition: opacity .3s;
+      background: rgba(0, 0, 0, .2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      backdrop-filter: blur(2px)
+    }
+
+    .legend-item.fog {
+      opacity: .15
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, .2)
+    }
+
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, .3);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all .3s;
+      pointer-events: none
+    }
+
+    .detail-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto
+    }
+
+    .detail-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: var(--panel-w);
+      max-width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #f8f5ea, #f0ede2);
+      z-index: 101;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform .35s cubic-bezier(.34, 1.56, .64, 1);
+      color: #2a2a1a
+    }
+
+    .detail-panel.open {
+      transform: translateX(0)
+    }
+
+    .detail-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      background: rgba(0, 0, 0, .05);
+      border: none;
+      color: #8a8a7a;
+      font-size: 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 10
+    }
+
+    .dh {
+      padding: 28px 22px 18px;
+      border-bottom: 1px solid rgba(0, 0, 0, .06)
+    }
+
+    .dh h2 {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .dh .sub {
+      font-size: .78rem;
+      color: #8a7a3a;
+      font-weight: 600
+    }
+
+    .db {
+      padding: 18px 22px
+    }
+
+    .db .desc {
+      font-size: .8rem;
+      line-height: 1.65;
+      margin-bottom: 18px
+    }
+
+    .mg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-bottom: 18px
+    }
+
+    .mi {
+      padding: 9px 11px;
+      background: rgba(0, 0, 0, .03);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, .05)
+    }
+
+    .mi .lb {
+      font-size: .62rem;
+      color: #8a8a7a;
+      margin-bottom: 2px
+    }
+
+    .mi .vl {
+      font-size: .78rem;
+      font-weight: 600
+    }
+
+    .cl {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 18px
+    }
+
+    .cc {
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, .02);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, .05)
+    }
+
+    .cc .cn {
+      font-size: .78rem;
+      font-weight: 700;
+      margin-bottom: 2px
+    }
+
+    .cc .cd {
+      font-size: .7rem;
+      color: #6a6a5a;
+      line-height: 1.4
+    }
+
+    .tb {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(200, 168, 56, .1);
+      border: 1px solid rgba(200, 168, 56, .2);
+      border-radius: 5px;
+      font-size: .68rem;
+      font-weight: 600;
+      color: #8a7a3a;
+      margin-right: 3px
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      color: #8a8a7a;
+      text-decoration: none;
+      font-size: .78rem
+    }
+
+    @media(max-width:640px) {
+      .legend {
+        display: none
+      }
+
+      .top-title {
+        font-size: 1rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="map-view" id="mapView">
+    <div class="svg-wrap" id="svgWrap">
+      <div class="svg-transform" id="svgT">
+        <div class="map-container" id="mapContainer">
+          <div class="tile-layer" id="tileLayer"></div>
+          <svg class="map-svg" id="mapSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4096 4096"
+            text-rendering="geometricPrecision">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="8" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <g id="coastG"></g>
+            <g id="borderG"></g>
+            <g id="regionLblG"></g>
+            <g id="routeG" pointer-events="none"></g>
+            <g id="cityG"></g>
+            <g id="cityLblG"></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="top-bar">
+      <div>
+        <div class="top-title">Ауракс — Карта Мира</div>
+        <div class="top-sub">Ringforged · политическая карта планеты</div>
+      </div>
+    </div>
+
+    <div class="legend" id="legend"></div>
+    <div class="zoom-btns">
+      <button class="zoom-btn" id="zIn">+</button>
+      <button class="zoom-btn" id="zOut">-</button>
+      <button class="zoom-btn" id="zRst">&#x27F3;</button>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-row">
+        <span class="progress-label" id="pLabel">Том 1</span>
+        <input type="range" class="progress-slider" id="pSlider" min="1" max="8" step="1" value="1">
+        <button class="spoiler-btn" id="spoilerBtn">СПОЙЛЕР</button>
+      </div>
+      <div class="tom-chips" id="tomChips"></div>
+    </div>
+  </div>
+
+  <div class="tooltip" id="tip"></div>
+  <div class="detail-overlay" id="dOverlay"></div>
+  <aside class="detail-panel" id="dPanel">
+    <button class="detail-close" id="dClose">&times;</button>
+    <div id="dContent"></div>
+  </aside>
+
+  <script src="data/aurax.js"></script>
+  <script>
+    (function () {
+      const D = window.AURAX_DATA; if (!D) return;
+      const NS = "http://www.w3.org/2000/svg";
+      const $ = id => document.getElementById(id);
+      const svg = $("mapSvg");
+
+      let currentTom = 1, spoilerMode = false;
+      const all = { labels: [], cities: [], cityLbls: [], routes: [], legendItems: [] };
+      const rMap = new Map(); D.regions.forEach(r => rMap.set(r.id, r));
+
+      const CI = { "capital": "star", "capital-destroyed": "skull", "arena": "swords", "landmark": "temple", "military": "fire", "temple": "candle", "sacred": "diamond", "port": "anchor", "waypoint": "compass" };
+      const EI = { "Ветер / Природа": "wind", "Вода / Лёд": "water", "Электричество / Земля": "bolt", "Огонь": "fire", "Гравитация / Иллюзии": "gravity", "Хаос / Все стихии": "chaos", "Кровь / Распад / Тьма": "blood" };
+
+      function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+      Promise.all([
+        fetch("data/aurax-world.json").then(r => r.json()),
+        fetch("data/aurax-cities.geojson").then(r => r.json()),
+        fetch("data/aurax-route.geojson").then(r => r.json()),
+        fetch("data/aurax-hit.bin").then(r => r.arrayBuffer()),
+      ]).then(([world, cities, route, hitBin]) => {
+        const hmW = 1024, hmH = 1024;
+        const regionData = new Uint8Array(hitBin);
+        const [_, __, svgW, svgH] = world.viewBox.split(" ").map(Number);
+        const GEO_SCALE = svgW / 900;
+
+        // Faction borders (no coastlines — PNG already shows them)
+        world.factionBorders.forEach(d => {
+          const el = document.createElementNS(NS, "path");
+          el.setAttribute("d", d); el.setAttribute("class", "faction-border");
+          $("borderG").appendChild(el);
+        });
+
+        // Region labels
+        world.regions.forEach(r => {
+          const lbl = document.createElementNS(NS, "text");
+          lbl.setAttribute("x", r.cx); lbl.setAttribute("y", r.cy);
+          const isSmall = r.id === "dead-zone" || r.id === "oblivion-island" || r.id === "cult-island";
+          lbl.setAttribute("class", "region-label" + (isSmall ? " small" : ""));
+          lbl.setAttribute("data-tom", r.tom);
+          lbl.setAttribute("data-id", r.id);
+          lbl.textContent = r.name;
+          $("regionLblG").appendChild(lbl);
+          all.labels.push(lbl);
+        });
+
+        // Route (GeoJSON in 900-space → scale to SVG-space)
+        if (route && route.features) {
+          route.features.forEach(f => {
+            const p = f.properties;
+            const pts = f.geometry.coordinates.map(c => [c[0] * GEO_SCALE, c[1] * GEO_SCALE]);
+            const el = document.createElementNS(NS, "path");
+            el.setAttribute("d", "M" + pts.map(c => c[0].toFixed(1) + "," + c[1].toFixed(1)).join("L"));
+            el.setAttribute("class", "route-line" + (p.dash ? " dashed" : ""));
+            el.style.stroke = p.color; el.setAttribute("data-tom", p.tom);
+            if (p.hidden) el.setAttribute("data-hidden", "true");
+            $("routeG").appendChild(el); all.routes.push(el);
+            const [lx, ly] = pts[pts.length - 1];
+            const dot = document.createElementNS(NS, "circle");
+            dot.setAttribute("cx", lx); dot.setAttribute("cy", ly); dot.setAttribute("r", 14);
+            dot.setAttribute("fill", p.color); dot.setAttribute("class", "route-dot");
+            dot.setAttribute("data-tom", p.tom);
+            if (p.hidden) dot.setAttribute("data-hidden", "true");
+            dot.style.filter = "url(#glow)"; dot.style.stroke = "rgba(255,255,255,.5)"; dot.style.strokeWidth = "3";
+            $("routeG").appendChild(dot); all.routes.push(dot);
+          });
+        }
+
+        // Cities (GeoJSON in 900-space → scale to SVG-space)
+        const cfm = new Map();
+        if (cities && cities.features) {
+          cities.features.forEach(f => {
+            cfm.set(f.properties.id, f.properties);
+            const p = f.properties;
+            const cx = f.geometry.coordinates[0] * GEO_SCALE;
+            const cy = f.geometry.coordinates[1] * GEO_SCALE;
+            const isCap = p.type === "capital" || p.type === "capital-destroyed";
+            const r = isCap ? 20 : 12;
+            const fill = p.type === "capital-destroyed" ? "#b84838" : isCap ? "#c8a838" : "#6a7a5a";
+            const dot = document.createElementNS(NS, "circle");
+            dot.setAttribute("cx", cx); dot.setAttribute("cy", cy); dot.setAttribute("r", r); dot.setAttribute("fill", fill);
+            dot.setAttribute("class", "city-dot"); dot.setAttribute("data-city-id", p.id);
+            dot.setAttribute("data-region", p.region); dot.setAttribute("data-tom", p.tom);
+            if (p.hidden) dot.setAttribute("data-hidden", "true");
+            dot.style.stroke = "rgba(255,255,255,.6)"; dot.style.strokeWidth = "3";
+            $("cityG").appendChild(dot); all.cities.push(dot);
+            if (isCap || p.type === "temple" || p.type === "sacred") {
+              const lbl = document.createElementNS(NS, "text");
+              lbl.setAttribute("x", cx); lbl.setAttribute("y", cy + r + 30);
+              lbl.setAttribute("class", "city-label"); lbl.setAttribute("data-tom", p.tom);
+              if (p.hidden) lbl.setAttribute("data-hidden", "true");
+              lbl.textContent = p.name;
+              $("cityLblG").appendChild(lbl); all.cityLbls.push(lbl);
+            }
+          });
+        }
+
+        // Legend
+        world.regions.forEach(r => {
+          const div = document.createElement("div"); div.className = "legend-item"; div.setAttribute("data-tom", r.tom);
+          div.innerHTML = '<span class="legend-dot" style="background:' + r.color + '"></span>' + esc(r.name);
+          $("legend").appendChild(div); all.legendItems.push(div);
+        });
+
+        buildChips();
+        applyVis();
+        setupInteraction(cfm, regionData, hmW, hmH, world.regions);
+      });
+
+      function buildChips() {
+        for (let t = 1; t <= 8; t++) {
+          const ch = document.createElement("span"); ch.className = "tom-chip";
+          ch.textContent = D.tomLabels[t] || ("Том " + t); ch.dataset.tom = t;
+          ch.addEventListener("click", () => { $("pSlider").value = t; setTom(t); });
+          $("tomChips").appendChild(ch);
+        }
+      }
+
+      function applyVis() {
+        const tom = spoilerMode ? 99 : currentTom;
+        all.labels.forEach(el => {
+          const t = +el.getAttribute("data-tom") || 0;
+          const id = el.getAttribute("data-id") || "";
+          const isHidden = id === "cult-island" || id === "oblivion-island";
+          el.classList.toggle("fog", (isHidden && tom < 6) || (t > tom && !!t));
+        });
+        [all.cities, all.cityLbls].forEach(a => a.forEach(el => {
+          const t = +el.getAttribute("data-tom") || 0;
+          const h = el.getAttribute("data-hidden") === "true";
+          el.classList.remove("fog");
+          if (h && tom < 6) { el.classList.add("fog"); return; }
+          if (t > tom) el.classList.add("fog");
+        }));
+        all.routes.forEach(el => {
+          const t = +el.getAttribute("data-tom") || 0;
+          const h = el.getAttribute("data-hidden") === "true";
+          if (h && tom < 6) { el.style.opacity = "0"; return; }
+          el.style.opacity = t <= tom ? "1" : "0";
+        });
+        all.legendItems.forEach(el => {
+          const t = +el.getAttribute("data-tom") || 0;
+          el.classList.toggle("fog", t > tom && !!t);
+        });
+        $("tomChips").querySelectorAll(".tom-chip").forEach(ch => {
+          const t = +ch.dataset.tom;
+          ch.classList.remove("unlocked", "current");
+          if (t <= tom) ch.classList.add("unlocked");
+          if (t === currentTom && !spoilerMode) ch.classList.add("current");
+        });
+      }
+
+      function setTom(t) {
+        currentTom = t; $("pLabel").textContent = D.tomLabels[t] || ("Том " + t);
+        if (spoilerMode) { spoilerMode = false; $("spoilerBtn").classList.remove("active"); $("spoilerBtn").textContent = "СПОЙЛЕР"; }
+        applyVis();
+      }
+      $("pSlider").addEventListener("input", () => setTom(+$("pSlider").value));
+      $("spoilerBtn").addEventListener("click", () => {
+        spoilerMode = !spoilerMode;
+        $("spoilerBtn").classList.toggle("active", spoilerMode);
+        $("spoilerBtn").textContent = spoilerMode ? "СКРЫТЬ" : "СПОЙЛЕР";
+        $("pLabel").textContent = spoilerMode ? "ВСЁ ОТКРЫТО" : (D.tomLabels[currentTom] || ("Том " + currentTom));
+        applyVis();
+      });
+
+      // Store for hit-testing
+      let _regionData, _hmW, _hmH, _worldRegions;
+
+      function setupInteraction(cfm, regionData, hmW, hmH, worldRegions) {
+        _regionData = regionData; _hmW = hmW; _hmH = hmH; _worldRegions = worldRegions;
+        let hovered = null;
+        const svgWrap = $("svgWrap"), tip = $("tip");
+        function showTip(x, y, html) { tip.innerHTML = html; tip.style.left = (x + 14) + "px"; tip.style.top = (y + 14) + "px"; tip.classList.add("visible"); }
+        function hideTip() { tip.classList.remove("visible"); }
+
+        function hitTestRegion(clientX, clientY) {
+          const container = $("mapContainer");
+          const rect = container.getBoundingClientRect();
+          const sx = (clientX - rect.left) / rect.width;
+          const sy = (clientY - rect.top) / rect.height;
+          if (sx < 0 || sx > 1 || sy < 0 || sy > 1) return null;
+          const px = Math.floor(sx * _hmW);
+          const py = Math.floor(sy * _hmH);
+          if (px < 0 || px >= _hmW || py < 0 || py >= _hmH) return null;
+          const ri = _regionData[py * _hmW + px];
+          if (ri === 255 || ri >= _worldRegions.length) return null;
+          return _worldRegions[ri];
+        }
+
+        svgWrap.addEventListener("mousemove", e => {
+          const els = document.elementsFromPoint(e.clientX, e.clientY);
+          let cE = null;
+          for (const el of els) {
+            if (!cE && el.classList && el.classList.contains("city-dot") && !el.classList.contains("fog")) cE = el;
+          }
+          if (cE) {
+            const cp = cfm.get(cE.getAttribute("data-city-id"));
+            if (cp) showTip(e.clientX, e.clientY, '<strong>' + esc(cp.name) + '</strong><span class="tt-sub">' + esc(cp.desc || "") + '</span>');
+            if (hovered && hovered !== cE) hovered.classList && hovered.classList.remove("hover");
+            hovered = cE; return;
+          }
+          // Region hit-test via binary map
+          const reg = hitTestRegion(e.clientX, e.clientY);
+          if (reg) {
+            const rD = rMap.get(reg.id);
+            if (rD) showTip(e.clientX, e.clientY, '<strong>' + esc(rD.name) + '</strong><span class="tt-sub">' + esc(rD.element || rD.biome || rD.desc || "") + '</span>');
+          } else {
+            hideTip();
+          }
+          if (hovered) { hovered.classList && hovered.classList.remove("hover"); hovered = null; }
+        });
+        svgWrap.addEventListener("mouseleave", () => { if (hovered) { hovered.classList && hovered.classList.remove("hover"); hovered = null; } hideTip(); });
+
+        svgWrap.addEventListener("click", e => {
+          if (hasPanned) return;
+          // Check cities first
+          const els = document.elementsFromPoint(e.clientX, e.clientY);
+          let cE = null;
+          for (const el of els) {
+            if (!cE && el.classList && el.classList.contains("city-dot") && !el.classList.contains("fog")) cE = el;
+          }
+          if (cE) {
+            const rid = cE.getAttribute("data-region");
+            if (rid) { const rD = rMap.get(rid); if (rD) openDetail(rD); }
+            return;
+          }
+          // Then check region via hit-test
+          const reg = hitTestRegion(e.clientX, e.clientY);
+          if (reg) {
+            const rD = rMap.get(reg.id);
+            if (rD) openDetail(rD);
+          }
+        });
+        $("dClose").addEventListener("click", closeDetail);
+        $("dOverlay").addEventListener("click", closeDetail);
+        document.addEventListener("keydown", e => { if (e.key === "Escape") closeDetail(); });
+      }
+
+      function openDetail(r) {
+        const tomStr = Array.isArray(r.tom) ? r.tom.map(t => D.tomLabels[t] || ("Том " + t)).join(", ") : "";
+        let ch = "";
+        if (r.cities && r.cities.length) {
+          ch = '<div style="margin-top:12px"><h3 style="font-size:.7rem;font-weight:700;color:#8a7a3a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Локации</h3><div class="cl">' +
+            r.cities.map(c => '<div class="cc"><div class="cn">' + esc(c.name) + '</div><div class="cd">' + esc(c.desc) + '</div></div>').join("") +
+            '</div></div>';
+        }
+        $("dContent").innerHTML =
+          '<div class="dh"><h2>' + esc(r.name) + '</h2>' +
+          (r.element ? '<div class="sub">' + esc(r.element) + '</div>' : '') +
+          (r.direction ? '<div style="font-size:.68rem;color:#8a8a7a;margin-top:5px">' + esc(r.direction) + '</div>' : '') + '</div>' +
+          '<div class="db"><p class="desc">' + esc(r.desc) + '</p>' +
+          '<div class="mg"><div class="mi"><div class="lb">Биом</div><div class="vl">' + esc(r.biome || "\u2014") + '</div></div>' +
+          '<div class="mi"><div class="lb">Фракция</div><div class="vl">' + esc(r.faction || "\u2014") + '</div></div></div>' +
+          (tomStr ? '<div style="margin-bottom:18px"><div>' + tomStr.split(", ").map(t => '<span class="tb">' + esc(t) + '</span>').join("") + '</div></div>' : '') +
+          ch + '<a href="index.html" class="back-link">&larr; Вернуться к содержанию</a></div>';
+        $("dPanel").classList.add("open"); $("dOverlay").classList.add("open");
+      }
+      function closeDetail() { $("dPanel").classList.remove("open"); $("dOverlay").classList.remove("open"); }
+
+      // TILE RENDERER
+      const TILE_SIZE = 256;
+      const MAP_SIZE = 4096;
+      const MAX_ZOOM = 4;
+      const tileLayer = $("tileLayer");
+      const activeTiles = new Map();
+      const prevTiles = new Map();
+      let currentZoomLevel = -1;
+
+      function zoomToTileLevel(mapScale) {
+        const z = Math.ceil(Math.log2(mapScale * MAP_SIZE / TILE_SIZE));
+        return Math.max(0, Math.min(MAX_ZOOM, z));
+      }
+
+      function updateTiles() {
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const z = zoomToTileLevel(scale);
+        const gridSize = Math.pow(2, z);
+        const tileWorldSize = MAP_SIZE / gridSize;
+        const tileScreenSize = tileWorldSize * scale;
+
+        const mapOriginX = vw / 2 + tx - MAP_SIZE / 2 * scale;
+        const mapOriginY = vh / 2 + ty - MAP_SIZE / 2 * scale;
+
+        const pad = 1;
+        const startTX = Math.max(0, Math.floor(-mapOriginX / tileScreenSize) - pad);
+        const startTY = Math.max(0, Math.floor(-mapOriginY / tileScreenSize) - pad);
+        const endTX = Math.min(gridSize - 1, Math.floor((vw - mapOriginX) / tileScreenSize) + pad);
+        const endTY = Math.min(gridSize - 1, Math.floor((vh - mapOriginY) / tileScreenSize) + pad);
+
+        const zoomChanged = z !== currentZoomLevel;
+        if (zoomChanged) {
+          for (const [k, img] of prevTiles) { img.remove(); prevTiles.delete(k); }
+          for (const [k, img] of activeTiles) { img.style.zIndex = "0"; prevTiles.set(k, img); }
+          activeTiles.clear();
+          currentZoomLevel = z;
+        }
+
+        const needed = new Set();
+        let pending = 0;
+        for (let ty = startTY; ty <= endTY; ty++) {
+          for (let tx2 = startTX; tx2 <= endTX; tx2++) {
+            const key = `${z}/${tx2}_${ty}`;
+            needed.add(key);
+            if (!activeTiles.has(key)) {
+              const img = new Image();
+              img.style.left = (tx2 * tileWorldSize) + "px";
+              img.style.top = (ty * tileWorldSize) + "px";
+              img.style.width = tileWorldSize + "px";
+              img.style.height = tileWorldSize + "px";
+              img.style.zIndex = "1";
+              img.loading = "eager";
+              pending++;
+              img.onload = () => {
+                pending--;
+                if (pending <= 0) {
+                  for (const [k, old] of prevTiles) { old.remove(); prevTiles.delete(k); }
+                }
+              };
+              img.onerror = () => { pending--; };
+              img.src = `data/tiles/${key}.png`;
+              tileLayer.appendChild(img);
+              activeTiles.set(key, img);
+            }
+          }
+        }
+
+        if (pending <= 0) {
+          for (const [k, old] of prevTiles) { old.remove(); prevTiles.delete(k); }
+        }
+
+        for (const [key, img] of activeTiles) {
+          if (!needed.has(key)) { img.remove(); activeTiles.delete(key); }
+        }
+      }
+
+      // ZOOM & PAN
+      const initScale = Math.min(window.innerWidth, window.innerHeight) / 4096 * 0.92;
+      let scale = initScale, tx = 0, ty = 0, isDown = false, startX, startY, startTx, startTy, hasPanned = false;
+      const svgWrap = $("svgWrap"), svgT = $("svgT");
+      let tileRAF = 0;
+      function schedTiles() { if (!tileRAF) tileRAF = requestAnimationFrame(() => { tileRAF = 0; updateTiles(); }); }
+      function upd() {
+        svgT.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + scale + ")";
+        schedTiles();
+      }
+      upd();
+      svgWrap.addEventListener("wheel", e => {
+        e.preventDefault(); const rect = svgWrap.getBoundingClientRect();
+        const mx = e.clientX - rect.left - rect.width / 2, my = e.clientY - rect.top - rect.height / 2;
+        const f = e.deltaY > 0 ? .92 : 1.08; const ns = Math.min(3, Math.max(initScale * 0.5, scale * f));
+        const r = ns / scale; tx = mx - r * (mx - tx); ty = my - r * (my - ty); scale = ns; upd();
+      }, { passive: false });
+      svgWrap.addEventListener("pointerdown", e => { if (e.button !== 0) return; isDown = true; hasPanned = false; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty; svgWrap.setPointerCapture(e.pointerId); });
+      svgWrap.addEventListener("pointermove", e => { if (!isDown) return; const dx = e.clientX - startX, dy = e.clientY - startY; if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasPanned = true; tx = startTx + dx; ty = startTy + dy; upd(); });
+      svgWrap.addEventListener("pointerup", () => { isDown = false; });
+      let pd = 0, ps = 1;
+      svgWrap.addEventListener("touchstart", e => { if (e.touches.length === 2) { pd = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY); ps = scale; } }, { passive: true });
+      svgWrap.addEventListener("touchmove", e => { if (e.touches.length === 2) { const d = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY); scale = Math.min(3, Math.max(initScale * 0.5, ps * (d / pd))); upd(); } }, { passive: true });
+      $("zIn").addEventListener("click", () => { scale = Math.min(3, scale * 1.35); upd(); });
+      $("zOut").addEventListener("click", () => { scale = Math.max(initScale * 0.5, scale / 1.35); upd(); });
+      $("zRst").addEventListener("click", () => { scale = initScale; tx = 0; ty = 0; upd(); });
+      window.addEventListener("resize", schedTiles);
+    })();
+  </script>
+</body>
+
+</html>

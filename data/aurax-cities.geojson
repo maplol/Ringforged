@@ -1,0 +1,38 @@
+{
+  "type": "FeatureCollection",
+  "name": "aurax_cities",
+  "features": [
+    { "type":"Feature", "properties":{"id":"dale-ruins","name":"Блуждающий Дол","type":"capital-destroyed","region":"wandering-dale","tom":1,"desc":"Город на шести лапах. Родина Влада. Уничтожен Игнис."}, "geometry":{"type":"Point","coordinates":[170,330]} },
+    { "type":"Feature", "properties":{"id":"dale-heart","name":"Площадь Сердца","type":"landmark","region":"wandering-dale","tom":1,"desc":"Механизм-сердце города. Разрушен."}, "geometry":{"type":"Point","coordinates":[155,345]} },
+    { "type":"Feature", "properties":{"id":"dale-windmills","name":"Мельничные поля","type":"landmark","region":"wandering-dale","tom":1,"desc":"Ветряные мельницы. Сожжены."}, "geometry":{"type":"Point","coordinates":[125,370]} },
+    { "type":"Feature", "properties":{"id":"caravan-road","name":"Караванный Тракт","type":"waypoint","region":"wandering-dale","tom":1,"desc":"Путь каравана. Влад подобран здесь."}, "geometry":{"type":"Point","coordinates":[200,260]} },
+
+    { "type":"Feature", "properties":{"id":"aqua-grand","name":"Аква-Гранд","type":"capital","region":"azure-rivers","tom":2,"desc":"Город на сталактитах над бездонным ущельем."}, "geometry":{"type":"Point","coordinates":[260,155]} },
+    { "type":"Feature", "properties":{"id":"aqua-arena","name":"Ледяная Арена","type":"arena","region":"azure-rivers","tom":2,"desc":"Тренировочная арена на замёрзшем водопаде."}, "geometry":{"type":"Point","coordinates":[300,120]} },
+    { "type":"Feature", "properties":{"id":"aqua-vault","name":"Хранилище Глубин","type":"landmark","region":"azure-rivers","tom":2,"desc":"Подводное хранилище древних колец."}, "geometry":{"type":"Point","coordinates":[220,190]} },
+    { "type":"Feature", "properties":{"id":"aqua-bridge","name":"Ледяной Мост","type":"landmark","region":"azure-rivers","tom":2,"desc":"Мост между главными сталактитами."}, "geometry":{"type":"Point","coordinates":[320,170]} },
+
+    { "type":"Feature", "properties":{"id":"neo-dune","name":"Нео-Дюна","type":"capital","region":"tektron","tom":3,"desc":"Каньон-город. Неон, металл, техно-грозы."}, "geometry":{"type":"Point","coordinates":[660,530]} },
+    { "type":"Feature", "properties":{"id":"rusty-wastes","name":"Ржавые Пустоши","type":"arena","region":"tektron","tom":3,"desc":"Руины машин. Турнирная арена."}, "geometry":{"type":"Point","coordinates":[620,590]} },
+    { "type":"Feature", "properties":{"id":"tektron-tunnels","name":"Тоннели","type":"landmark","region":"tektron","tom":3,"desc":"Подземная сеть и серверная Совета."}, "geometry":{"type":"Point","coordinates":[690,570]} },
+    { "type":"Feature", "properties":{"id":"tektron-towers","name":"Громоотводы","type":"landmark","region":"tektron","tom":3,"desc":"Медные вышки, притягивающие молнии."}, "geometry":{"type":"Point","coordinates":[720,490]} },
+
+    { "type":"Feature", "properties":{"id":"crimson-forge","name":"Багровый Горн","type":"capital","region":"ignis-empire","tom":4,"desc":"Столица Игнис в кратере вулканов."}, "geometry":{"type":"Point","coordinates":[145,500]} },
+    { "type":"Feature", "properties":{"id":"doom-forge","name":"Кузня Судного Дня","type":"military","region":"ignis-empire","tom":4,"desc":"Кратер с осколком Метеорита."}, "geometry":{"type":"Point","coordinates":[175,500]} },
+    { "type":"Feature", "properties":{"id":"ignis-lavaport","name":"Лавовые Причалы","type":"landmark","region":"ignis-empire","tom":4,"desc":"Баржи по рекам лавы."}, "geometry":{"type":"Point","coordinates":[100,520]} },
+    { "type":"Feature", "properties":{"id":"ignis-platforms","name":"Платформы над магмой","type":"arena","region":"ignis-empire","tom":4,"desc":"Боевые платформы на цепях."}, "geometry":{"type":"Point","coordinates":[150,520]} },
+    { "type":"Feature", "properties":{"id":"hermit-pass","name":"Перевал Отшельника","type":"waypoint","region":"ignis-empire","tom":4,"desc":"Горный проход. Встреча с потомком Кузнеца."}, "geometry":{"type":"Point","coordinates":[80,475]} },
+
+    { "type":"Feature", "properties":{"id":"aurumgard-castle","name":"Небесный Чертог","type":"capital","region":"aurumgard","tom":5,"desc":"Парящий дворец из мрамора и золота."}, "geometry":{"type":"Point","coordinates":[660,190]} },
+    { "type":"Feature", "properties":{"id":"shadow-slums","name":"Трущобы Теней","type":"landmark","region":"aurumgard","tom":5,"desc":"Под замком. Вечная тень, нищета."}, "geometry":{"type":"Point","coordinates":[640,230]} },
+    { "type":"Feature", "properties":{"id":"aurumgard-gardens","name":"Парящие Сады","type":"landmark","region":"aurumgard","tom":5,"desc":"Острова зелени в облаках."}, "geometry":{"type":"Point","coordinates":[700,160]} },
+    { "type":"Feature", "properties":{"id":"aurumgard-liftshaft","name":"Подъёмная Шахта","type":"landmark","region":"aurumgard","tom":5,"desc":"Гравитационный лифт между мирами."}, "geometry":{"type":"Point","coordinates":[650,240]} },
+    { "type":"Feature", "properties":{"id":"storm-port","name":"Порт Штормов","type":"port","region":"tektron","tom":6,"desc":"Береговой порт, путь к Острову."}, "geometry":{"type":"Point","coordinates":[770,550]} },
+
+    { "type":"Feature", "properties":{"id":"ouroboros-shrine","name":"Святилище Уробороса","type":"temple","region":"oblivion-island","tom":6,"desc":"Костяной храм. Ритуалы запретной магии.","hidden":true}, "geometry":{"type":"Point","coordinates":[745,782]} },
+    { "type":"Feature", "properties":{"id":"cult-citadel","name":"Цитадель Теней","type":"temple","region":"cult-island","tom":6,"desc":"Скрытая крепость Культа Омега.","hidden":true}, "geometry":{"type":"Point","coordinates":[195,780]} },
+
+    { "type":"Feature", "properties":{"id":"anvil-crater","name":"Наковальня Кузнеца","type":"sacred","region":"dead-zone","tom":8,"desc":"Центр кратера. Место финальной битвы."}, "geometry":{"type":"Point","coordinates":[358,441]} },
+    { "type":"Feature", "properties":{"id":"morven-plateau","name":"Плато Морвена","type":"arena","region":"dead-zone","tom":8,"desc":"Стеклянные обломки. Последний фронт."}, "geometry":{"type":"Point","coordinates":[360,435]} }
+  ]
+}

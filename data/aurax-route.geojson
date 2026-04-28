@@ -1,0 +1,66 @@
+{
+  "type": "FeatureCollection",
+  "name": "aurax_vlad_route",
+  "features": [
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t1","label":"Том 1 — Бегство из Дола","tom":1,"color":"#5aaa5a"},
+      "geometry":{"type":"LineString","coordinates":[[170,330],[175,305],[185,280],[200,260]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t1t2","label":"Том 1→2 — Караван в Аква-Гранд","tom":1,"color":"#5aaa5a","dash":true},
+      "geometry":{"type":"LineString","coordinates":[[200,260],[215,235],[230,210],[245,185],[260,155]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t2","label":"Том 2 — Лазурные Реки","tom":2,"color":"#4a98c8"},
+      "geometry":{"type":"LineString","coordinates":[[260,155],[300,120],[320,170],[220,190]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t2t3","label":"Том 2→3 — Через океан в Тектрон","tom":2,"color":"#4a98c8","dash":true},
+      "geometry":{"type":"LineString","coordinates":[[260,155],[300,200],[350,260],[400,320],[450,380],[500,430],[550,470],[600,500],[640,520],[660,530]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t3","label":"Том 3 — Тектрон","tom":3,"color":"#c89838"},
+      "geometry":{"type":"LineString","coordinates":[[660,530],[690,570],[620,590]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t3t4","label":"Том 3→4 — Через океан в Игнис","tom":3,"color":"#c89838","dash":true},
+      "geometry":{"type":"LineString","coordinates":[[660,530],[600,540],[540,550],[470,560],[400,565],[330,560],[270,545],[220,525],[175,510],[145,500]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t4","label":"Том 4 — Игнис","tom":4,"color":"#c85838"},
+      "geometry":{"type":"LineString","coordinates":[[145,500],[80,475],[100,520],[175,500]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t4t5","label":"Том 4→5 — Через океан в Аурумгард","tom":4,"color":"#c85838","dash":true},
+      "geometry":{"type":"LineString","coordinates":[[145,500],[200,460],[270,410],[340,360],[410,310],[480,270],[540,240],[590,215],[630,200],[660,190]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t5","label":"Том 5 — Аурумгард","tom":5,"color":"#b8a838"},
+      "geometry":{"type":"LineString","coordinates":[[660,190],[700,160],[640,230],[650,240]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t5t6","label":"Том 5→6 — К Порту Штормов","tom":5,"color":"#b8a838","dash":true},
+      "geometry":{"type":"LineString","coordinates":[[650,240],[660,300],[680,360],[700,420],[725,470],[750,510],[770,550]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t6","label":"Том 6 — К Острову Забвения","tom":6,"color":"#8868b8","hidden":true},
+      "geometry":{"type":"LineString","coordinates":[[770,550],[765,600],[760,650],[755,700],[750,740],[745,782]]}
+    },
+    {
+      "type":"Feature",
+      "properties":{"id":"r-t8","label":"Том 8 — Финал: Мёртвая Зона","tom":8,"color":"#d8d8d8"},
+      "geometry":{"type":"LineString","coordinates":[[770,550],[720,510],[660,480],[590,470],[520,460],[450,450],[358,441]]}
+    }
+  ]
+}
